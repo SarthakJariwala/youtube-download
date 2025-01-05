@@ -6,12 +6,13 @@ timestamp_to_seconds() {
     local hours minutes seconds
 
     if [[ $timestamp =~ ([0-9]+):([0-9]+):([0-9]+) ]]; then
-        hours=${BASH_REMATCH[1]}
-        minutes=${BASH_REMATCH[2]}
-        seconds=${BASH_REMATCH[3]}
+        # Remove leading zeros and convert to decimal
+        hours=$((10#${BASH_REMATCH[1]}))
+        minutes=$((10#${BASH_REMATCH[2]}))
+        seconds=$((10#${BASH_REMATCH[3]}))
         echo $((hours * 3600 + minutes * 60 + seconds))
     else
-        echo "Invalid timestamp format. Use HH:MM:SS"
+        echo "Invalid timestamp format. Use HH:MM:SS" >&2
         exit 1
     fi
 }
