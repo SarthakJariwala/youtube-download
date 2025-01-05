@@ -104,11 +104,16 @@ if $audio_only; then
         output_file="${output_file%.*}.mp3"
     fi
 
-    echo "Downloading audio..."
+    echo "Downloading audio to: $output_file"
     ffmpeg -ss "$start_time" -i "${url_array[1]}" $duration_param \
         -c:a libmp3lame -q:a 2 "$output_file"
 else
-    echo "Downloading video..."
+    # Change output extension to mp4 if not already specified
+    if [[ ! "$output_file" =~ \.(mp4|mkv)$ ]]; then
+        output_file="${output_file%.*}.mp4"
+    fi
+
+    echo "Downloading video to: $output_file"
     ffmpeg -ss "$start_time" -i "${url_array[0]}" \
         -ss "$start_time" -i "${url_array[1]}" \
         $duration_param \
